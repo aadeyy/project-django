@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Static Finance Dashboard</title>
+    <style>
+        /* CSS - The Paint and Layout */
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #0f172a;
+            color: #f1f5f9;
+            display: flex;
+            justify-content: center;
+            padding: 50px;
+        }
+
+        .container {
+            width: 450px;
+            background: #1e293b;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+        }
+
+        h2 { text-align: center; margin-bottom: 30px; letter-spacing: 1px; }
+
+        /* Grid for Stats */
+        .grid-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .stat-box {
+            padding: 20px;
+            border-radius: 12px;
+            background: #334155;
+            text-align: center;
+        }
+
+        .full-width { grid-column: span 2; border: 1px solid #38bdf8; }
+        .income-box { border-bottom: 4px solid #22c55e; }
+        .expense-box { border-bottom: 4px solid #ef4444; }
+
+        .label { font-size: 0.75rem; color: #94a3b8; text-transform: uppercase; }
+        .amount { font-size: 1.5rem; font-weight: 800; display: block; }
+
+        /* Form Styling */
+        .entry-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            border-top: 1px solid #334155;
+            padding-top: 25px;
+        }
+
+        input, select {
+            background: #0f172a;
+            border: 1px solid #334155;
+            color: white;
+            padding: 12px;
+            border-radius: 8px;
+            outline: none;
+        }
+
+        button {
+            background: #38bdf8;
+            color: #0f172a;
+            font-weight: bold;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            cursor: not-allowed; /* Honest cursor for a dead button */
+            transition: opacity 0.2s;
+        }
+
+        /* Fake List */
+        .history {
+            margin-top: 25px;
+        }
+
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            background: rgba(255,255,255,0.03);
+            margin-bottom: 5px;
+            border-radius: 5px;
+            font-size: 0.9rem;
+        }
+
+        .pos { color: #22c55e; }
+        .neg { color: #ef4444; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>My Finances</h2>
+
+    <div class="grid-stats">
+        <div class="stat-box full-width">
+            <span class="label">Net Savings</span>
+            <span class="amount">$2,450.00</span>
+        </div>
+        <div class="stat-box income-box">
+            <span class="label">Income</span>
+            <span class="amount">$5,000</span>
+        </div>
+        <div class="stat-box expense-box">
+            <span class="label">Spent</span>
+            <span class="amount">$2,550</span>
+        </div>
+    </div>
+
+    <div class="entry-form">
+        <input type="text" placeholder="Description...">
+        <input type="number" placeholder="Amount...">
+        <select>
+            <option>Income</option>
+            <option>Expenditure</option>
+        </select>
+        <button type="button">Add Transaction</button>
+    </div>
+
+    <div class="history">
+        <div class="history-item">
+            <span>Salary</span>
+            <span class="pos">+$5,000.00</span>
+        </div>
+        <div class="history-item">
+            <span>Rent</span>
+            <span class="neg">-$1,800.00</span>
+        </div>
+        <div class="history-item">
+            <span>Groceries</span>
+            <span class="neg">-$750.00</span>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
