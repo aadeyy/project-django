@@ -2,143 +2,106 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Static Finance Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FTracker</title>
     <style>
-        /* CSS - The Paint and Layout */
-        body {
-            font-family: 'Segoe UI', sans-serif;
-            background-color: #0f172a;
-            color: #f1f5f9;
-            display: flex;
-            justify-content: center;
-            padding: 50px;
+        /* --- CORE RESET --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, sans-serif; }
+        body { background-color: #0f172a; color: #f1f5f9; line-height: 1.6; }
+
+        /* --- NAVIGATION LOGIC (The Only Way to Switch Pages without JS) --- */
+        section { display: none; min-height: 100vh; padding: 60px 20px; }
+        
+        /* Show Home by default */
+        #home { display: block; }
+
+        /* When #main is targeted, show Dashboard and hide Home */
+        #main:target { display: block; }
+        #main:target ~ #home { display: none; }
+
+        /* Navigation back to Home */
+        #home:target { display: block; }
+        #home:target ~ #main { display: none; }
+
+        /* --- HOME PAGE STYLING --- */
+        .container-hero { max-width: 1000px; margin: 0 auto; text-align: center; }
+        
+        .hero-title { font-size: 4rem; margin-bottom: 20px; color: #38bdf8; letter-spacing: -1px; }
+        .hero-desc { font-size: 1.2rem; color: #94a3b8; max-width: 700px; margin: 0 auto 50px; }
+
+        .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 50px; }
+        .feature-box { background: #1e293b; padding: 30px; border-radius: 15px; border: 1px solid #334155; transition: 0.3s; }
+        .feature-box:hover { transform: translateY(-10px); border-color: #38bdf8; }
+        .icon { font-size: 2.5rem; margin-bottom: 15px; display: block; }
+        .feature-box h3 { color: #f8fafc; margin-bottom: 10px; }
+
+        .btn-enter { 
+            display: inline-block; background: #38bdf8; color: #0f172a; padding: 18px 40px; 
+            text-decoration: none; font-weight: bold; border-radius: 8px; font-size: 1.1rem;
         }
 
-        .container {
-            width: 450px;
-            background: #1e293b;
-            padding: 30px;
-            border-radius: 20px;
-            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
-        }
+        /* --- DASHBOARD STYLING --- */
+        .dashboard-container { max-width: 900px; margin: 0 auto; background: #1e293b; padding: 40px; border-radius: 20px; }
+        .back-link { color: #94a3b8; text-decoration: none; margin-bottom: 20px; display: inline-block; font-size: 0.9rem; }
+        
+        .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 30px; }
+        .stat-card { background: #0f172a; padding: 20px; border-radius: 12px; text-align: center; }
+        .stat-card.savings { border: 2px solid #38bdf8; }
+        .stat-card.income { border-bottom: 5px solid #22c55e; }
+        .stat-card.expense { border-bottom: 5px solid #ef4444; }
+        
+        .label { font-size: 0.8rem; color: #64748b; text-transform: uppercase; display: block; }
+        .value { font-size: 1.6rem; font-weight: 800; color: #fff; }
 
-        h2 { text-align: center; margin-bottom: 30px; letter-spacing: 1px; }
+        .dummy-form { display: grid; grid-template-columns: 2fr 1fr 1fr auto; gap: 10px; margin-bottom: 40px; }
+        input, select { background: #0f172a; border: 1px solid #334155; color: white; padding: 12px; border-radius: 8px; }
+        .btn-add { background: #334155; color: #94a3b8; border: none; padding: 12px 20px; border-radius: 8px; cursor: not-allowed; }
 
-        /* Grid for Stats */
-        .grid-stats {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-bottom: 30px;
-        }
+        table { width: 100%; border-collapse: collapse; }
+        th { text-align: left; padding: 12px; color: #38bdf8; border-bottom: 2px solid #334155; }
+        td { padding: 15px 12px; border-bottom: 1px solid #334155; font-size: 0.95rem; }
+        .amt-pos { color: #22c55e; font-weight: bold; }
+        .amt-neg { color: #ef4444; font-weight: bold; }
 
-        .stat-box {
-            padding: 20px;
-            border-radius: 12px;
-            background: #334155;
-            text-align: center;
-        }
-
-        .full-width { grid-column: span 2; border: 1px solid #38bdf8; }
-        .income-box { border-bottom: 4px solid #22c55e; }
-        .expense-box { border-bottom: 4px solid #ef4444; }
-
-        .label { font-size: 0.75rem; color: #94a3b8; text-transform: uppercase; }
-        .amount { font-size: 1.5rem; font-weight: 800; display: block; }
-
-        /* Form Styling */
-        .entry-form {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            border-top: 1px solid #334155;
-            padding-top: 25px;
-        }
-
-        input, select {
-            background: #0f172a;
-            border: 1px solid #334155;
-            color: white;
-            padding: 12px;
-            border-radius: 8px;
-            outline: none;
-        }
-
-        button {
-            background: #38bdf8;
-            color: #0f172a;
-            font-weight: bold;
-            padding: 12px;
-            border: none;
-            border-radius: 8px;
-            cursor: not-allowed; /* Honest cursor for a dead button */
-            transition: opacity 0.2s;
-        }
-
-        /* Fake List */
-        .history {
-            margin-top: 25px;
-        }
-
-        .history-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 10px;
-            background: rgba(255,255,255,0.03);
-            margin-bottom: 5px;
-            border-radius: 5px;
-            font-size: 0.9rem;
-        }
-
-        .pos { color: #22c55e; }
-        .neg { color: #ef4444; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h2>My Finances</h2>
+    <section id="home">
+        <div class="container-hero">
+            <h1 class="hero-title">FTracker</h1>
+            <p class="hero-desc">
+                The ultimate minimalist tool to visualize your wealth. Designed for clarity, 
+                built for speed, and engineered with efficieny
+            </p>
 
-    <div class="grid-stats">
-        <div class="stat-box full-width">
-            <span class="label">Net Savings</span>
-            <span class="amount">$2,450.00</span>
-        </div>
-        <div class="stat-box income-box">
-            <span class="label">Income</span>
-            <span class="amount">$5,000</span>
-        </div>
-        <div class="stat-box expense-box">
-            <span class="label">Spent</span>
-            <span class="amount">$2,550</span>
-        </div>
-    </div>
+            <div class="feature-grid">
+                <div class="feature-box">
+                    <span class="icon">💸</span>
+                    <h3>Calculate Expenses</h3>
+                    <p>Track every outflow with precision. Understanding your spending habits is the first step to financial freedom.</p>
+                </div>
 
-    <div class="entry-form">
-        <input type="text" placeholder="Description...">
-        <input type="number" placeholder="Amount...">
-        <select>
-            <option>Income</option>
-            <option>Expenditure</option>
-        </select>
-        <button type="button">Add Transaction</button>
-    </div>
+                <div class="feature-box">
+                    <span class="icon">📈</span>
+                    <h3>Calculate Savings</h3>
+                    <p>Instantly compute your monthly surplus. Our layout is designed to prioritize your net profit over everything else.</p>
+                </div>
 
-    <div class="history">
-        <div class="history-item">
-            <span>Salary</span>
-            <span class="pos">+$5,000.00</span>
+                <div class="feature-box">
+                    <span class="icon">🏦</span>
+                    <h3>Show Savings</h3>
+                    <p>Get a bird's-eye view of your accumulated wealth. See your total savings grow with our clean summary cards.</p>
+                </div>
+            </div>
+
+            <a href="{% url 'finance' %}" class="btn-enter">Launch Dashboard</a>
+            
+            <p style="margin-top: 40px; font-size: 0.8rem; color: #475569;">
+                Accountability ends here. We provide the transparency; you provide the backbone.
+            </p>
         </div>
-        <div class="history-item">
-            <span>Rent</span>
-            <span class="neg">-$1,800.00</span>
-        </div>
-        <div class="history-item">
-            <span>Groceries</span>
-            <span class="neg">-$750.00</span>
-        </div>
-    </div>
-</div>
+    </section>
 
 </body>
 </html>
