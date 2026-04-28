@@ -1,1 +1,1 @@
-web: gunicorn ftproject.wsgi
+web: gunicorn FTracker.wsgi
