@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logged Out - FTracker</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, sans-serif; }
+        body { background-color: #0f172a; color: #f1f5f9; line-height: 1.6; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+
+        .logout-container { background: #1e293b; padding: 40px; border-radius: 15px; border: 1px solid #334155; max-width: 400px; width: 100%; text-align: center; }
+        .logout-container h2 { color: #38bdf8; margin-bottom: 20px; }
+        .logout-container p { color: #94a3b8; margin-bottom: 30px; }
+
+        .btn-login { display: inline-block; background: #38bdf8; color: #0f172a; padding: 12px 24px; text-decoration: none; font-weight: bold; border-radius: 8px; }
+        .btn-login:hover { background: #0ea5e9; }
+    </style>
+</head>
+<body>
+    <div class="logout-container">
+        <h2>You have been logged out</h2>
+        <p>Thank you for using FTracker. You have been successfully logged out.</p>
+        <a href="{% url 'login' %}" class="btn-login">Login Again</a>
+    </div>
+</body>
+</html>

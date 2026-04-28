@@ -169,7 +169,10 @@
 <body>
     <section id="main">
         <div class="dashboard-container">
-            <a href="{% url 'index' %}" class="back-link">← Return to About Page</a>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <a href="{% url 'index' %}" class="back-link">← Return to About Page</a>
+                <a href="{% url 'logout' %}?next={% url 'login' %}" class="back-link" style="color: #ef4444;">Logout</a>
+            </div>
             <h2 style="margin-bottom: 30px;">Financial Dashboard</h2>
 
             <div class="stats-row">
