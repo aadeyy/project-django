@@ -33,4 +33,4 @@ def finance(request):
         'savings': savings
     }
 
-    return render(request, 'finance.html', context)
+    return render(request, 'Finance.html', context)
