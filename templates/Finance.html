@@ -1,190 +1,142 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<style>
-    /* RESET */
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        font-family: 'Segoe UI', Arial, sans-serif;
-    }
+/* RESET */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Arial, sans-serif;
+}
 
-    body {
-        background: #f4f6f9;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        min-height: 100vh;
-    }
+body {
+    background: #f4f6f9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px; /* Added padding so container doesn't hit screen edges */
+}
 
+.dashboard-container {
+    background: #fff;
+    padding: 30px;
+    width: 100%;       /* Full width on small screens */
+    max-width: 900px;  /* Stops growing at 900px */
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+}
+
+.back-link {
+    text-decoration: none;
+    color: #555;
+    font-size: 14px;
+    display: inline-block;
+    margin-bottom: 15px;
+}
+
+h2 {
+    text-align: center;
+    color: #333;
+}
+
+/* STATS - Flex wrapping for responsiveness */
+.stats-row {
+    display: flex;
+    flex-wrap: wrap; /* Allows cards to wrap to next line */
+    gap: 20px;
+    margin-bottom: 25px;
+}
+
+.stat-card {
+    flex: 1;
+    min-width: 200px; /* Prevents cards from getting too squashed */
+    padding: 20px;
+    border-radius: 10px;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-card .label {
+    font-size: 14px;
+    opacity: 0.8;
+}
+
+.stat-card .value {
+    font-size: 22px;
+    font-weight: bold;
+    margin-top: 5px;
+}
+
+.income { background: #4caf50; }
+.expense { background: #f44336; }
+.savings { background: #2196f3; }
+
+/* FORM - Stacks on small screens */
+.dummy-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.dummy-form input,
+.dummy-form select {
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    flex: 1;
+    min-width: 150px; /* Ensures inputs don't disappear */
+}
+
+.btn-add {
+    background: #333;
+    color: #fff;
+    border: none;
+    padding: 10px 25px;
+    border-radius: 6px;
+    cursor: pointer;
+    flex-grow: 0;
+}
+
+.btn-add:hover {
+    background: #000;
+}
+
+/* TABLE - Horizontal scroll for small screens */
+.table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 500px; /* Ensures table doesn't look terrible when squashed */
+}
+
+thead {
+    background: #f1f1f1;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.amt-pos { color: #2e7d32; font-weight: bold; }
+.amt-neg { color: #c62828; font-weight: bold; }
+
+/* MEDIA QUERIES */
+@media (max-width: 600px) {
     .dashboard-container {
-        background: #fff;
-        padding: 30px;
-        width: 900px;
-        border-radius: 12px;
-        box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+        padding: 20px;
     }
-
-    .back-link {
-        text-decoration: none;
-        color: #555;
-        font-size: 14px;
-        display: inline-block;
-        margin-bottom: 15px;
-    }
-
-    h2 {
-        text-align: center;
-        color: #333;
-    }
-
-    /* STATS */
-    .stats-row {
-        display: flex;
-        gap: 20px;
-        margin-bottom: 25px;
+    
+    .btn-add {
+        width: 100%; /* Button takes full width on mobile */
     }
 
     .stat-card {
-        flex: 1;
-        padding: 20px;
-        border-radius: 10px;
-        color: #fff;
-        display: flex;
-        flex-direction: column;
+        text-align: center;
     }
-
-    .stat-card .label {
-        font-size: 14px;
-        opacity: 0.8;
-    }
-
-    .stat-card .value {
-        font-size: 22px;
-        font-weight: bold;
-        margin-top: 5px;
-    }
-
-    .income { background: #4caf50; }
-    .expense { background: #f44336; }
-    .savings { background: #2196f3; }
-
-    /* FORM */
-    .dummy-form {
-        display: flex;
-        gap: 10px;
-        margin-bottom: 20px;
-    }
-
-    .dummy-form input,
-    .dummy-form select {
-        padding: 10px;
-        border-radius: 6px;
-        border: 1px solid #ccc;
-        flex: 1;
-    }
-
-    .btn-add {
-        background: #333;
-        color: #fff;
-        border: none;
-        padding: 10px 15px;
-        border-radius: 6px;
-        cursor: pointer;
-    }
-
-    .btn-add:hover {
-        background: #000;
-    }
-
-    /* TABLE */
-    table {
-        width: 100%;
-        border-collapse: collapse;
-    }
-
-    thead {
-        background: #f1f1f1;
-    }
-
-    th, td {
-        padding: 12px;
-        text-align: left;
-        border-bottom: 1px solid #ddd;
-    }
-
-    .amt-pos {
-        color: #2e7d32;
-        font-weight: bold;
-    }
-
-    .amt-neg {
-        color: #c62828;
-        font-weight: bold;
-    }
-</style>
-<body>
-    <section id="main">
-        <div class="dashboard-container">
-            <a href="{% url 'index' %}" class="back-link">← Return to About Page</a>
-            <h2 style="margin-bottom: 30px;">Financial Dashboard</h2>
-
-            <div class="stats-row">
-                <div class="stat-card income">
-                    <span class="label">Total Income</span>
-                    <span class="value">${{ income }}</span>
-                </div>
-                <div class="stat-card expense">
-                    <span class="label">Expenses</span>
-                    <span class="value">${{ expense }}</span>
-                </div>
-                <div class="stat-card savings">
-                    <span class="label">Net Savings</span>
-                    <span class="value">${{ savings }}</span>
-                </div>
-            </div>
-
-            <form method="POST" class="dummy-form">
-                {% csrf_token %}
-                
-                <input type="text" name="description" placeholder="Description" required>
-                <input type="number" name="amount" step="0.01" placeholder="Amount" required>
-                
-                <select name="category">
-                    <option value="Income">Income</option>
-                    <option value="Expense">Expense</option>
-                </select>
-                
-                <button type="submit" class="btn-add">Add</button>
-            </form>
-
-            <table>
-                <thead>
-                    <tr><th>Description</th><th>Category</th><th>Amount</th></tr>
-                </thead>
-                <tbody>
-                    {% for t in transactions %}
-                    <tr>
-                        <td>{{ t.description }}</td>
-                        <td>{{ t.category }}</td>
-                        <td class="{% if t.category == 'Income' %}amt-pos{% else %}amt-neg{% endif %}">
-                            {% if t.category == 'Income' %}+{% else %}-{% endif %}
-                            ${{ t.amount|floatformat:2 }}
-                        </td>
-                    </tr>
-                    {% empty %}
-                    <tr>
-                        <td colspan="3">No transactions yet</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </section>
-</body>
-</html>
+}
