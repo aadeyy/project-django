@@ -104,6 +104,20 @@
         background: #000;
     }
 
+    .btn-clear {
+        background: #ef4444;
+        color: #fff;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background 0.2s ease;
+    }
+
+    .btn-clear:hover {
+        background: #d32f2f;
+    }
+
     /* TABLE */
     table {
         width: 100%;
@@ -190,7 +204,7 @@
                 </div>
             </div>
 
-            <form method="POST" class="dummy-form">
+            <form method="POST" class="dummy-form" id="transaction-form">
                 {% csrf_token %}
                 <input type="text" name="description" placeholder="Description" required>
                 <input type="number" name="amount" step="0.01" placeholder="Amount" required>
@@ -201,6 +215,7 @@
                 </select>
                 
                 <button type="submit" class="btn-add">Add</button>
+                <button type="button" id="clear-btn" class="btn-clear">Clear</button>
             </form>
 
             <table>
@@ -226,5 +241,14 @@
             </table>
         </div>
     </section>
+
+    <script>
+        const transactionForm = document.getElementById('transaction-form');
+        const clearBtn = document.getElementById('clear-btn');
+
+        clearBtn.addEventListener('click', () => {
+            transactionForm.reset();
+        });
+    </script>
 </body>
 </html>
