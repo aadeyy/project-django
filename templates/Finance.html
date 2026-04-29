@@ -128,59 +128,56 @@
     <section id="main">
         <div class="dashboard-container">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                <a href="{% url 'index' %}" class="back-link">← Return to About Page</a>
+                <a href="{% url 'index' %}" class="back-link">← Return Home</a>
                 
-                <form action="{% url 'logout' %}" method="post" style="display: inline;">
+                <form action="{% url 'logout' %}" method="post">
                     {% csrf_token %}
-                    <button type="submit" class="logout-btn">Logout</button>
+                    <button type="submit" class="logout-btn">Logout ({{ user.username }})</button>
                 </form>
             </div>
-
-            <h2 style="margin-bottom: 30px;">Financial Dashboard</h2>
 
             <div class="stats-row">
                 <div class="stat-card income">
                     <span class="label">Total Income</span>
-                    <span class="value">${{ income }}</span>
+                    <span class="value">₹{{ income|floatformat:2 }}</span>
                 </div>
                 <div class="stat-card expense">
                     <span class="label">Expenses</span>
-                    <span class="value">${{ expense }}</span>
+                    <span class="value">₹{{ expense|floatformat:2 }}</span>
                 </div>
                 <div class="stat-card savings">
                     <span class="label">Net Savings</span>
-                    <span class="value">${{ savings }}</span>
+                    <span class="value">₹{{ savings|floatformat:2 }}</span>
                 </div>
             </div>
 
-            <form method="POST" class="dummy-form" id="transaction-form">
+            <form method="POST" class="dummy-form">
                 {% csrf_token %}
-                <input type="text" name="description" placeholder="Description" required>
-                <input type="number" name="amount" step="0.01" placeholder="Amount" required>
+                <input type="text" name="description" placeholder="Salary, Rent, Food..." required>
+                <input type="number" name="amount" step="0.01" placeholder="0.00" required>
                 <select name="category">
                     <option value="Income">Income</option>
                     <option value="Expense">Expense</option>
                 </select>
-                <button type="submit" class="btn-add">Add</button>
-                <button type="button" id="clear-btn" class="btn-clear">Clear</button>
+                <button type="submit" class="btn-add" style="cursor: pointer;">Add</button>
             </form>
 
             <table>
                 <thead>
-                    <tr><th>Description</th><th>Category</th><th>Amount</th></tr>
+                    <tr><th>Date</th><th>Description</th><th>Category</th><th>Amount</th></tr>
                 </thead>
                 <tbody>
                     {% for t in transactions %}
                     <tr>
+                        <td>{{ t.date|date:"d M Y" }}</td>
                         <td>{{ t.description }}</td>
                         <td>{{ t.category }}</td>
                         <td class="{% if t.category == 'Income' %}amt-pos{% else %}amt-neg{% endif %}">
-                            {% if t.category == 'Income' %}+{% else %}-{% endif %}
-                            ${{ t.amount|floatformat:2 }}
+                            {% if t.category == 'Income' %}+{% else %}-{% endif %} ₹{{ t.amount }}
                         </td>
                     </tr>
                     {% empty %}
-                    <tr><td colspan="3">No transactions yet</td></tr>
+                    <tr><td colspan="4" style="text-align:center;">No transactions found for your account.</td></tr>
                     {% endfor %}
                 </tbody>
             </table>

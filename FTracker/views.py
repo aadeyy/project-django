@@ -30,13 +30,14 @@ def finance(request):
         category = request.POST.get('category')
 
         Transaction.objects.create(
+            user=request.user,  # <--- THIS IS THE MISSING LINK
             description=description,
             amount=amount,
             category=category
         )
         return redirect('finance')
 
-    transactions = Transaction.objects.all().order_by('-date')
+    transactions = Transaction.objects.filter(user=request.user).order_by('-date')
     income = Transaction.objects.filter(category='Income').aggregate(Sum('amount'))['amount__sum'] or 0
     expense = Transaction.objects.filter(category='Expense').aggregate(Sum('amount'))['amount__sum'] or 0
     savings = income - expense
