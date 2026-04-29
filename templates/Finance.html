@@ -20,14 +20,14 @@
         justify-content: center;
         align-items: center;
         min-height: 100vh;
-        padding: 20px; /* Added padding for mobile breathing room */
+        padding: 20px;
     }
 
     .dashboard-container {
         background: #fff;
         padding: 30px;
         width: 100%;
-        max-width: 900px; /* Changed from fixed width to max-width */
+        max-width: 900px;
         border-radius: 12px;
         box-shadow: 0 8px 25px rgba(0,0,0,0.08);
     }
@@ -38,6 +38,18 @@
         font-size: 14px;
         display: inline-block;
         margin-bottom: 15px;
+    }
+
+    /* Helper class to make the Logout Button look like the Back Link */
+    .logout-btn {
+        background: none;
+        border: none;
+        color: #ef4444;
+        font-size: 14px;
+        cursor: pointer;
+        padding: 0;
+        margin-bottom: 15px;
+        font-family: inherit;
     }
 
     h2 {
@@ -61,16 +73,8 @@
         flex-direction: column;
     }
 
-    .stat-card .label {
-        font-size: 14px;
-        opacity: 0.8;
-    }
-
-    .stat-card .value {
-        font-size: 22px;
-        font-weight: bold;
-        margin-top: 5px;
-    }
+    .stat-card .label { font-size: 14px; opacity: 0.8; }
+    .stat-card .value { font-size: 22px; font-weight: bold; margin-top: 5px; }
 
     .income { background: #4caf50; }
     .expense { background: #f44336; }
@@ -83,8 +87,7 @@
         margin-bottom: 20px;
     }
 
-    .dummy-form input,
-    .dummy-form select {
+    .dummy-form input, .dummy-form select {
         padding: 10px;
         border-radius: 6px;
         border: 1px solid #ccc;
@@ -100,10 +103,6 @@
         cursor: pointer;
     }
 
-    .btn-add:hover {
-        background: #000;
-    }
-
     .btn-clear {
         background: #ef4444;
         color: #fff;
@@ -111,73 +110,18 @@
         padding: 10px 15px;
         border-radius: 6px;
         cursor: pointer;
-        transition: background 0.2s ease;
-    }
-
-    .btn-clear:hover {
-        background: #d32f2f;
     }
 
     /* TABLE */
-    table {
-        width: 100%;
-        border-collapse: collapse;
-    }
-
-    thead {
-        background: #f1f1f1;
-    }
-
-    th, td {
-        padding: 12px;
-        text-align: left;
-        border-bottom: 1px solid #ddd;
-    }
-
-    .amt-pos {
-        color: #2e7d32;
-        font-weight: bold;
-    }
-
-    .amt-neg {
-        color: #c62828;
-        font-weight: bold;
-    }
-
-    /* --- RESPONSIVE MODEL --- */
+    table { width: 100%; border-collapse: collapse; }
+    thead { background: #f1f1f1; }
+    th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
+    .amt-pos { color: #2e7d32; font-weight: bold; }
+    .amt-neg { color: #c62828; font-weight: bold; }
 
     @media (max-width: 768px) {
-        .stats-row {
-            flex-direction: column; /* Stack cards vertically */
-            gap: 10px;
-        }
-
-        .dummy-form {
-            flex-direction: column; /* Stack form inputs */
-        }
-
-        .dummy-form input, 
-        .dummy-form select, 
-        .btn-add {
-            width: 100%;
-            flex: none;
-        }
-
-        .dashboard-container {
-            padding: 20px;
-        }
-    }
-
-    @media (max-width: 480px) {
-        table {
-            display: block;
-            overflow-x: auto; /* Allow horizontal scroll for table on tiny screens */
-            white-space: nowrap;
-        }
-        
-        h2 {
-            font-size: 1.2rem;
-        }
+        .stats-row { flex-direction: column; gap: 10px; }
+        .dummy-form { flex-direction: column; }
     }
 </style>
 <body>
@@ -185,8 +129,13 @@
         <div class="dashboard-container">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                 <a href="{% url 'index' %}" class="back-link">← Return to About Page</a>
-                <a href="{% url 'logout' %}?next={% url 'login' %}" class="back-link" style="color: #ef4444;">Logout</a>
+                
+                <form action="{% url 'logout' %}" method="post" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="logout-btn">Logout</button>
+                </form>
             </div>
+
             <h2 style="margin-bottom: 30px;">Financial Dashboard</h2>
 
             <div class="stats-row">
@@ -208,12 +157,10 @@
                 {% csrf_token %}
                 <input type="text" name="description" placeholder="Description" required>
                 <input type="number" name="amount" step="0.01" placeholder="Amount" required>
-                
                 <select name="category">
                     <option value="Income">Income</option>
                     <option value="Expense">Expense</option>
                 </select>
-                
                 <button type="submit" class="btn-add">Add</button>
                 <button type="button" id="clear-btn" class="btn-clear">Clear</button>
             </form>
@@ -233,9 +180,7 @@
                         </td>
                     </tr>
                     {% empty %}
-                    <tr>
-                        <td colspan="3">No transactions yet</td>
-                    </tr>
+                    <tr><td colspan="3">No transactions yet</td></tr>
                     {% endfor %}
                 </tbody>
             </table>
@@ -244,9 +189,7 @@
 
     <script>
         const transactionForm = document.getElementById('transaction-form');
-        const clearBtn = document.getElementById('clear-btn');
-
-        clearBtn.addEventListener('click', () => {
+        document.getElementById('clear-btn').addEventListener('click', () => {
             transactionForm.reset();
         });
     </script>

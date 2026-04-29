@@ -21,6 +21,7 @@ def register(request):
         form = UserCreationForm()
     return render(request, 'registration/register.html', {'form': form})
 
+# views.py (Make sure this matches)
 @login_required
 def finance(request):
     if request.method == "POST":
@@ -33,11 +34,9 @@ def finance(request):
             amount=amount,
             category=category
         )
-
-        return redirect('finance')  # Prevent duplicate form submission
+        return redirect('finance')
 
     transactions = Transaction.objects.all().order_by('-date')
-
     income = Transaction.objects.filter(category='Income').aggregate(Sum('amount'))['amount__sum'] or 0
     expense = Transaction.objects.filter(category='Expense').aggregate(Sum('amount'))['amount__sum'] or 0
     savings = income - expense
@@ -48,5 +47,4 @@ def finance(request):
         'expense': expense,
         'savings': savings
     }
-
     return render(request, 'Finance.html', context)
